@@ -23,11 +23,15 @@ npm install node-profanity-filter
 import { Filter } from 'node-profanity-filter';
 
 const filter = new Filter({
-    wordBoundaries: true;
-    parseObfuscated : true;
-    replaceWith: '';
+    wordBoundaries: true,
+    parseObfuscated : true,
+    replaceWith: '',
+    disableDefaultList: false,  // true to start with empty word list
     excludeWords: [
         'excluded-badword'
+    ],
+    includeWords: [
+        'math'
     ]
 });
 
@@ -43,6 +47,9 @@ console.log(filter.isProfane('b@dw0rd'));
 // false (due to excludeWords)
 console.log(filter.isProfane('excluded-badword'));
 
+// true (due to includeWords)
+console.log(filter.isProfane('math'));
+
 // result: I like your .
 console.log(filter.sanitize('I like your badword.'));
 
@@ -54,10 +61,12 @@ console.log(filter.sanitize('I like your badword.', 'cat'));
 
 | Option            | Type       | Default | Description                                                  |
 |-------------------|------------|---------|--------------------------------------------------------------|
-| `wordBoundaries`      | boolean    | false   | Match only whole words instead of substrings                 |
-| `parseObfuscated `| boolean    | true    | Normalize common character obfuscations before matching      |
-| `replaceWith`     | string     | ''      | String to replace detected profane words with                |
-| `excludeWords`    | string[]   | []      | List of words to exclude from filtering    
+| `wordBoundaries`   | boolean    | false   | Match only whole words instead of substrings                 |
+| `parseObfuscated`  | boolean    | true    | Normalize common character obfuscations before matching      |
+| `replaceWith`      | string     | ''      | String to replace detected profane words with                |
+| `disableDefaultList` | boolean  | false   | Disable the default profanity word list                       |
+| `excludeWords`     | string[]   | []      | List of words to exclude from filtering                       |
+| `includeWords`     | string[]   | []      | List of additional words to include in filtering             |
 
 ## Author
 
