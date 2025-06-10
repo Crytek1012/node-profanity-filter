@@ -64,10 +64,11 @@ export class Filter {
     /**
      * Whether the string contains profane words
      * @param string 
+     * @param wordBoundaries match whole words (defaults to config)
      * @returns 
      */
-    isProfane(text: string): boolean {
-        if (this.wordBoundaries) {
+    isProfane(text: string, wordBoundaries = this.wordBoundaries): boolean {
+        if (wordBoundaries) {
             return (text.match(Filter.WORD_REGEX) || []).some(w => {
                 const normalized = this.parseObfuscated ? this.normalizeObfuscated(w) : w.toLowerCase();
                 return this.words.contains(normalized);
@@ -81,21 +82,21 @@ export class Filter {
      * Replace detected words
      * @param text 
      * @param replaceWith word used for replacing ( defaults to config )
+     * @param wordBoundaries match whole words (defaults to config)
      * @returns 
      */
-    sanitize(text: string, replaceWith: string = this.replaceWith): string {
-        if (this.wordBoundaries) {
-            const regex = /\b[\w@!$-]+\b/g;
+    sanitize(text: string, replaceWith: string = this.replaceWith, wordBoundaries = this.wordBoundaries): string {
+        if (wordBoundaries) {
             let result = '';
             let lastIndex = 0;
             let match;
 
-            while ((match = regex.exec(text)) !== null) {
+            while ((match = Filter.WORD_REGEX.exec(text)) !== null) {
                 result += text.slice(lastIndex, match.index);
                 const word = match[0];
                 const normalizedWord = this.parseObfuscated ? this.normalizeObfuscated(word) : word.toLowerCase();
                 result += this.words.contains(normalizedWord) ? replaceWith : word;
-                lastIndex = regex.lastIndex;
+                lastIndex = Filter.WORD_REGEX.lastIndex;
             }
 
             result += text.slice(lastIndex);
@@ -125,12 +126,13 @@ export class Filter {
     /**
      * Get a list of all matched words and their position
      * @param text 
+     * @param wordBoundaries match whole words (defaults to config)
      * @returns 
      */
-    getMatches(text: string): { word: string; start: number; end: number }[] {
+    getMatches(text: string, wordBoundaries = this.wordBoundaries): { word: string; start: number; end: number }[] {
         const matches = [];
 
-        if (this.wordBoundaries) {
+        if (wordBoundaries) {
             const words = text.match(/\b[\w@!$-]+\b/gi) || [];
             let offset = 0;
             for (const w of words) {
