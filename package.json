@@ -1,12 +1,17 @@
 {
   "name": "node-profanity-filter",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A Node.js profanity filter with support for exact matching, obfuscated word detection, and customizable replacement.",
   "license": "ISC",
   "author": "Crytek1012",
   "main": "dist/index.js",
   "type": "module",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Crytek1012/node-profanity-filter.git"
+  },
+  "homepage": "https://github.com/Crytek1012/node-profanity-filter#readme",
   "files": [
   "dist",
   "README.md",
