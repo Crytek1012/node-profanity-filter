@@ -1,6 +1,6 @@
 {
   "name": "node-profanity-filter",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A Node.js profanity filter with support for exact matching, obfuscated word detection, and customizable replacement.",
   "license": "ISC",
   "author": "Crytek1012",
@@ -13,24 +13,24 @@
   },
   "homepage": "https://github.com/Crytek1012/node-profanity-filter#readme",
   "files": [
-  "dist",
-  "README.md",
-  "LICENSE"
-],
-"keywords": [
-  "profanity",
-  "filter",
-  "bad-words",
-  "censorship",
-  "text-filter",
-  "profanity-filter",
-  "content-moderation",
-  "obfuscated-words",
-  "nodejs",
-  "typescript"
-],
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "profanity",
+    "filter",
+    "bad-words",
+    "censorship",
+    "text-filter",
+    "profanity-filter",
+    "content-moderation",
+    "obfuscated-words",
+    "nodejs",
+    "typescript"
+  ],
   "scripts": {
-    "test": "jest"
+    "test": "npx tsc && jest"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
