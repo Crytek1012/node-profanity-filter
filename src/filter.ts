@@ -32,7 +32,7 @@ export class Filter {
         const baseWords = disableDefaultList ? [] : flaggedWords.filter(w => !excludeWords.includes(w));
         const combinedWords = [...baseWords, ...includeWords];
 
-        this.words = new Trie(combinedWords.map(this.normalizeObfuscated));
+        this.words = new Trie(combinedWords);
     }
 
     /**
@@ -71,12 +71,24 @@ export class Filter {
     isProfane(text: string, wordBoundaries = this.wordBoundaries): boolean {
         if (wordBoundaries) {
             return (text.match(Filter.WORD_REGEX) || []).some(w => {
+
+                const lower = w.toLowerCase();
+                if (this.words.contains(lower)) return true;
+
                 const normalized = this.parseObfuscated ? this.normalizeObfuscated(w) : w.toLowerCase();
                 return this.words.contains(normalized);
             });
         }
-        const normalized = this.parseObfuscated ? this.normalizeObfuscated(text) : text.toLowerCase();
-        return this.words.containsIn(normalized.replace(/[^a-z0-9]/g, ''));
+
+        const lower = text.toLowerCase();
+        if (this.words.containsIn(lower.replace(/[^a-z0-9]/g, ''))) return true;
+
+        if (this.parseObfuscated) {
+            const normalized = this.normalizeObfuscated(lower);
+            return this.words.containsIn(normalized.replace(/[^a-z0-9]/g, ''));
+        }
+
+        return false;
     }
 
     /**
