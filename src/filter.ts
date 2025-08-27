@@ -20,7 +20,8 @@ export class Filter {
         '@': 'a',
         '$': 's',
         '1': 'i',
-        "0": 'o'
+        "0": 'o',
+        '3': 'e'
     };
 
     constructor({ wordBoundaries = false, parseObfuscated = true, replaceWith = '', disableDefaultList = false, excludeWords = [], includeWords = [] }: FilterOptions = {}) {
@@ -31,7 +32,7 @@ export class Filter {
         const baseWords = disableDefaultList ? [] : flaggedWords.filter(w => !excludeWords.includes(w));
         const combinedWords = [...baseWords, ...includeWords];
 
-        this.words = new Trie(combinedWords);
+        this.words = new Trie(combinedWords.map(this.normalizeObfuscated));
     }
 
     /**
@@ -85,42 +86,13 @@ export class Filter {
      * @param wordBoundaries match whole words (defaults to config)
      * @returns 
      */
-    sanitize(text: string, replaceWith: string = this.replaceWith, wordBoundaries = this.wordBoundaries): string {
-        if (wordBoundaries) {
-            let result = '';
-            let lastIndex = 0;
-            let match;
-
-            while ((match = Filter.WORD_REGEX.exec(text)) !== null) {
-                result += text.slice(lastIndex, match.index);
-                const word = match[0];
-                const normalizedWord = this.parseObfuscated ? this.normalizeObfuscated(word) : word.toLowerCase();
-                result += this.words.contains(normalizedWord) ? replaceWith : word;
-                lastIndex = Filter.WORD_REGEX.lastIndex;
-            }
-
-            result += text.slice(lastIndex);
-            return result;
-        }
-
-        const normalized = this.parseObfuscated ? this.normalizeObfuscated(text) : text;
-        const lower = normalized.toLowerCase();
-
-        let result = '';
-        let i = 0;
-
-        while (i < text.length) {
-            const matchLen = this.words.matchLengthAt(lower, i);
-            if (matchLen > 0) {
-                result += replaceWith.length === 1 ? replaceWith.repeat(matchLen) : replaceWith;
-                i += matchLen;
-            } else {
-                result += text[i];
-                i++;
-            }
-        }
-
-        return result;
+    sanitize(text: string, replaceWith: string = this.replaceWith): string {
+        return text.replace(/\b[\w@!$-]+\b/g, (word) => {
+            const normalized = this.parseObfuscated ? this.normalizeObfuscated(word) : word.toLowerCase();
+            return this.words.contains(normalized)
+                ? replaceWith.length === 1 ? replaceWith.repeat(word.length) : replaceWith
+                : word;
+        });
     }
 
     /**
