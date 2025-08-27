@@ -89,7 +89,7 @@ describe('Profanity Filter', () => {
         filter = new Filter({ wordBoundaries: true, parseObfuscated: true, replaceWith: 'X' });
         filter['words'].insert('badword');
         expect(filter.isProfane('b@a@dword')).toBe(true);
-        expect(filter.sanitize('b@a@dword nasty')).toBe('X nasty');
+        expect(filter.sanitize('b@a@dword nasty')).toBe('XXXXXXXXX nasty');
     });
 
     test('sanitize works with wordBoundaries and obfuscation disabled', () => {
@@ -97,7 +97,7 @@ describe('Profanity Filter', () => {
         filter['words'].insert('badword');
         expect(filter.isProfane('badword')).toBe(true);
         expect(filter.isProfane('b@a@dword')).toBe(false);
-        expect(filter.sanitize('badword b@a@dword')).toBe('X b@a@dword');
+        expect(filter.sanitize('badword b@a@dword')).toBe('XXXXXXX b@a@dword');
     });
 
     test('sanitize with mixed case profane words', () => {
@@ -116,8 +116,8 @@ describe('Profanity Filter', () => {
         filter = new Filter({ wordBoundaries: false, replaceWith: '#' });
         filter['words'].insert('badword');
         filter['words'].insert('nasty');
-        const result = filter.sanitize('badwordnasty');
-        expect(result).toBe('############'); // length of badword + nasty
+        const result = filter.sanitize('badword nasty');
+        expect(result).toBe('####### #####'); // length of badword + nasty
     });
 
 });
