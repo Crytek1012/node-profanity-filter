@@ -1,6 +1,6 @@
 {
   "name": "node-profanity-filter",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A Node.js profanity filter with support for exact matching, obfuscated word detection, and customizable replacement.",
   "license": "ISC",
   "author": "Crytek1012",
