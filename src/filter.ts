@@ -100,12 +100,14 @@ export class Filter {
      */
     sanitize(text: string, replaceWith: string = this.replaceWith): string {
         return text.replace(/\b[\w@!$-]+\b/g, (word) => {
-            const normalized = this.parseObfuscated ? this.normalizeObfuscated(word) : word.toLowerCase();
-            return this.words.contains(normalized)
-                ? replaceWith.length === 1 ? replaceWith.repeat(word.length) : replaceWith
-                : word;
+            const lower = word.toLowerCase();
+            if (this.words.contains(lower) || (this.parseObfuscated && this.words.contains(this.normalizeObfuscated(lower)))) {
+                return replaceWith.length === 1 ? replaceWith.repeat(word.length) : replaceWith;
+            }
+            return word;
         });
     }
+
 
     /**
      * Get a list of all matched words and their position
@@ -140,7 +142,4 @@ export class Filter {
 
         return matches;
     }
-
-
-
 }
