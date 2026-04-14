@@ -39,10 +39,10 @@ console.log(filter.isProfane('goodword'));
 // true
 console.log(filter.isProfane('b@dw0rd', {normalize: true}));
 
-// result: I like your .
+// result: {text: "I like your .", matches: string[]}
 console.log(filter.replace('I like your badword.'));
 
-// result: I like your cat.
+// result: {text: "I like your cat.", matches: string[]}
 console.log(filter.replace('I like your badword.', 'cat'));
 ```
 

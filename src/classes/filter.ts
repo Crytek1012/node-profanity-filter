@@ -90,7 +90,7 @@ export class Filter {
 
         result += input.slice(cursor);
 
-        return result;
+        return { text: result, matches };
     }
 
     private _normalizeToMap(input: string, strict: boolean, normalize: boolean) {
