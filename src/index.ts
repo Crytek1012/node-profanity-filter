@@ -1,1 +1,1 @@
-export { Filter } from './filter.js';
+export { Filter } from './classes/filter.js';

@@ -24,15 +24,10 @@ import { Filter } from 'node-profanity-filter';
 
 const filter = new Filter({
     wordBoundaries: true,
-    parseObfuscated : true,
+    normalize: true,
+    strict: false,
     replaceWith: '',
-    disableDefaultList: false,  // true to start with empty word list
-    excludeWords: [
-        'excluded-badword'
-    ],
-    includeWords: [
-        'math'
-    ]
+    words: ['badword']
 });
 
 // true
@@ -41,32 +36,24 @@ console.log(filter.isProfane('badword'));
 // false
 console.log(filter.isProfane('goodword'));
 
-// true (due to parseObfuscated)
-console.log(filter.isProfane('b@dw0rd'));
-
-// false (due to excludeWords)
-console.log(filter.isProfane('excluded-badword'));
-
-// true (due to includeWords)
-console.log(filter.isProfane('math'));
+// true
+console.log(filter.isProfane('b@dw0rd', {normalize: true}));
 
 // result: I like your .
-console.log(filter.sanitize('I like your badword.'));
+console.log(filter.replace('I like your badword.'));
 
 // result: I like your cat.
-console.log(filter.sanitize('I like your badword.', 'cat'));
+console.log(filter.replace('I like your badword.', 'cat'));
 ```
 
 ## Options
 
 | Option            | Type       | Default | Description                                                  |
 |-------------------|------------|---------|--------------------------------------------------------------|
-| `wordBoundaries`   | boolean    | false   | Match only whole words instead of substrings                 |
-| `parseObfuscated`  | boolean    | true    | Normalize common character obfuscations before matching      |
-| `replaceWith`      | string     | ''      | String to replace detected profane words with                |
-| `disableDefaultList` | boolean  | false   | Disable the default profanity word list                       |
-| `excludeWords`     | string[]   | []      | List of words to exclude from filtering                       |
-| `includeWords`     | string[]   | []      | List of additional words to include in filtering             |
+| `wordBoundaries`     | boolean    | false   | Match only whole words instead of substrings             |
+| `normalize`          | boolean    | true    | Normalize common character obfuscations before matching        |
+| `replaceWith`        | string     | ''      | String to replace detected profane words with                   |
+| `words`              | string[]   | [ ]      | List of words to include in the filter                 |
 
 ## Author
 
