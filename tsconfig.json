@@ -10,7 +10,8 @@
     
     "module": "esnext",
     "target": "esnext",
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "declaration": true
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
